@@ -1,0 +1,9 @@
+@if(Loggeado){
+  <p>Bienvenido{{user}}</p>
+}
+@else{
+<p><a href="#" class="enlace" (click)="Loggeado = true">Iniciar sesion</a></p>
+}
+
+<img src="https://github.com/gustavofranco.png" alt="" (click)="alerta(); Loggeado=false">
+<router-outlet/>
