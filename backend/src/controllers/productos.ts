@@ -1,37 +1,49 @@
-import { Request, Response} from 'express'
+import { Request, Response} from 'express';
+import Producto from '../models/producto';
 
-export const getProducts = (req: Request, res: Response) =>{
-    res.json({
-        msg: 'get Products'
-    })
+export const getProducts = async (req: Request, res: Response) =>{
+    const listProducts = await Producto.findAll()
+
+    res.json(listProducts)
 }
 
-export const getProduct = (req: Request, res: Response) =>{
+export const getProduct = async (req: Request, res: Response) =>{
     const { id } = req.params;
+    const producto = await Producto.findByPk(id);
 
-
-    res.json({
-        msg: 'get Product',
-        id: id
-    })
+    if(producto){
+        res.json(producto)
+    }else{
+        res.status(404).json({
+            msg:  'No existe un producto con ese id'
+        })
+    }
 }
 
-export const deleteProduct = (req: Request, res: Response) =>{
+export const deleteProduct = async (req: Request, res: Response) =>{
     const { id } = req.params;
+    const producto = await Producto.findByPk(id);
 
-
-    res.json({
-        msg: 'delete Product',
-        id: id
-    })
+    if(!producto){
+        res.status(404).json({
+            msg: 'No existe el producto ñero asi que no joda hdp'
+        })
+    }else{
+        await producto.destroy();
+        res.json({
+            msg: 'El producto fue eliminado master'
+        })
+    }
 }
 
-export const postProduct = (req: Request, res: Response)=>{
+export const postProduct = async (req: Request, res: Response)=>{
     const { body } = req;
-    res.json({
-        msg: 'post Product',
-        body
+    
+    
+    await Producto.create(body);
 
+    res.json({
+        msg: 'El producto fue agregado con exito'
     })
 }
 
